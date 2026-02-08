@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>リアルタイム震度v0.1.2</title>
+  <title>リアルタイム震度v0.1.3</title>
   <style>
     html, body {
       height: 100%;
@@ -28,6 +28,28 @@
       subdomains: 'abcd',
       maxZoom: 19
     }).addTo(map);
+
+    // 現在時刻を取得
+    const now = new Date();
+    const YYYY = now.getFullYear();
+    const MM = String(now.getMonth() + 1).padStart(2, '0');
+    const DD = String(now.getDate()).padStart(2, '0');
+    const HH = String(now.getHours()).padStart(2, '0');
+    const MI = String(now.getMinutes()).padStart(2, '0');
+    const SS = String(now.getSeconds()).padStart(2, '0');
+    
+    // YahooリアルタイムJSON URL
+    const url = `https://weather-kyoshin.west.edge.storage-yahoo.jp/RealTimeData/${YYYY}${MM}${DD}/${YYYY}${MM}${DD}${HH}${MI}${SS}.json`;
+    
+    console.log(url);
+    
+    // fetch
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        console.log('Yahoo JSON', data);
+      })
+      .catch(err => console.error('取得失敗:', err));
   </script>
 </body>
 </html>
