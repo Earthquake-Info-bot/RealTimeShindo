@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>リアルタイム震度v0.1.1</title>
+  <title>リアルタイム震度v0.1.2</title>
   <style>
     html, body {
       height: 100%;
@@ -14,29 +14,20 @@
       height: 100%;
     }
   </style>
-
-  <!-- CARTO.js ライト版 -->
-  <link rel="stylesheet" href="https://libs.cartocdn.com/carto.js/v4/carto.css" />
-  <script src="https://libs.cartocdn.com/carto.js/v4/carto.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
   <div id="map"></div>
   <script>
-    // CARTOクライアント作成
-    const client = new carto.Client({
-      apiKey: 'default_public',
-      username: 'public'
-    });
+    const map = L.map('map').setView([37.5, 137.0], 5);
 
-    // マップ作成（日本中心）
-    const map = new carto.Map({
-      container: 'map',
-      center: [37.5, 137.0],
-      zoom: 5
-    });
-
-    // CARTOライトのデフォルトベースマップだけ表示
-    client.addTo(map);
+    // CARTOライトのタイルを追加
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
   </script>
 </body>
 </html>
