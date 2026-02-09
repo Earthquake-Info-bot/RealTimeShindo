@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>リアルタイム震度vT0.1.4</title>
+  <title>リアルタイム震度vT0.1.5</title>
   <style>
     html, body {
       height: 100%;
@@ -21,6 +21,9 @@
   <div id="map"></div>
   <script>
     const map = L.map('map').setView([37.5, 137.0], 5);
+    // Canvas renderer を用意
+    const canvasRenderer = L.canvas({ padding: 0.5 });
+
 
     // CARTOライトのタイルを追加
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -51,8 +54,26 @@
       .then(res => res.json())
       .then(data => {
         console.log('Yahoo JSON', data);
+        
       })
       .catch(err => console.error('取得失敗:', err));
+
+    fetch('https://weather-kyoshin.west.edge.storage-yahoo.jp/SiteList/sitelist.json')
+      .then(r => r.json())
+      .then(json => {
+        json.items.forEach(([lat, lon]) => {
+          L.circleMarker([lat, lon], {
+            renderer: canvasRenderer,
+            radius: 4,
+            fillColor: '#ff0000',
+            fillOpacity: 0.8,
+            stroke: false
+          }).addTo(map);
+        });
+    
+        console.log('stations:', json.items.length);
+      })
+      .catch(err => console.error('sitelist取得失敗', err));
   </script>
 </body>
 </html>
